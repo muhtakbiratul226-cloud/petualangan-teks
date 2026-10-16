@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Teks Narasi: Fiksi atau Nonfiksi?</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0284C7',
+                            lightBlue: '#E0F2FE',
+                            green: '#16A34A',
+                            yellow: '#F59E0B',
+                            purple: '#9333EA',
+                            bg: '#F0F9FF',
+                        }
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F9FF;
+        }
+        h1, h2, h3, .font-fun {
+            font-family: 'Fredoka', cursive;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(-5%); }
+            50% { transform: translateY(0); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-sky-100 shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showScreen('screen-landing')">
+                <div class="w-10 h-10 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-200">
+                    <i class="fa-solid fa-book-open text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold text-sky-700 leading-none">Petualangan Teks Narasi</h1>
+                    <span class="text-xs text-slate-500 font-medium">Bahasa Indonesia - Kelas V SD</span>
+                </div>
+            </div>
+
+            <!-- Firebase Connection Status Badge -->
+            <div id="connection-status" class="flex items-center gap-2 bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-semibold border border-amber-200">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+                <span id="connection-text">Modus Lokal / Firebase Disiapkan</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER FOR SCREENS -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- ========================================== -->
+        <!-- 1. HALAMAN PEMBUKA (LANDING SCREEN)        -->
+        <!-- ========================================== -->
+        <section id="screen-landing" class="space-y-8 py-4">
+            <div class="bg-gradient-to-br from-sky-400 via-sky-500 to-indigo-600 rounded-3xl p-6 md:p-10 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="space-y-4 max-w-xl text-center md:text-left z-10">
+                    <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
+                        Kurikulum Merdeka • Kelas 5 SD
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold leading-tight">
+                        Petualangan Teks Narasi: Fiksi atau Nonfiksi?
+                    </h2>
+                    <p class="text-sky-100 text-sm md:text-base leading-relaxed">
+                        Ayo belajar membedakan kisah imajinatif (Fiksi) dan cerita peristiwa nyata (Nonfiksi) melalui teks aural (audio menyimak) yang seru dan penuh tantangan!
+                    </p>
+                    <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
+                        <button onclick="showRoleSelection('siswa')" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-6 py-3 rounded-2xl shadow-lg transition transform hover:-translate-y-1 flex items-center gap-2 text-base">
+                            <i class="fa-solid fa-graduation-cap"></i> Saya Siswa
+                        </button>
+                        <button onclick="showRoleSelection('guru')" class="bg-white hover:bg-sky-50 text-sky-700 font-bold px-6 py-3 rounded-2xl shadow-lg transition transform hover:-translate-y-1 flex items-center gap-2 text-base">
+                            <i class="fa-solid fa-chalkboard-user"></i> Saya Guru
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mascot / Storybook Illustration -->
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="w-48 h-48 md:w-64 md:h-64 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md border border-white/30 animate-bounce-slow">
+                        <i class="fa-solid fa-book-bookmark text-8xl text-amber-300 drop-shadow-lg"></i>
+                    </div>
+                    <p class="mt-3 text-xs text-sky-200 italic font-medium">Pengembang: Muh. Takbiratul Jahri, S.Pd</p>
+                </div>
+            </div>
+
+            <!-- Petunjuk Penggunaan -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-headphones"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">1. Menyimak Aural</h3>
+                        <p class="text-xs text-slate-600 mt-1">Dengarkan dongeng dan cerita nyata melalui tombol audio yang jernih dan interaktif.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">2. Main Mini Game</h3>
+                        <p class="text-xs text-slate-600 mt-1">Asah pemahamanmu lewat permainan Tebak Cerita, Pasangkan Ciri, dan Detektif Teks.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">3. Pantau Nilai</h3>
+                        <p class="text-xs text-slate-600 mt-1">Selesaikan kuis evaluasi dan kirimkan progres belajarmu langsung ke dashboard guru.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FORM / MODAL MODES -->
+        <!-- Siswa Join Modal -->
+        <div id="modal-siswa-join" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-sky-100 space-y-5">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-user-graduate text-sky-500"></i> Gabung Belajar Siswa
+                    </h3>
+                    <button onclick="closeModal('modal-siswa-join')" class="text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+                
+                <form id="form-join-siswa" onsubmit="handleJoinSiswa(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap Siswa</label>
+                        <input type="text" id="siswa-nama" required placeholder="Contoh: Andi Pratama" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Kelas / Absen</label>
+                        <input type="text" id="siswa-kelas" required placeholder="Contoh: V-A / 04" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Kode Kelas dari Guru</label>
+                        <input type="text" id="siswa-kode" placeholder="Masukkan 6-digit kode kelas (Opsional)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm uppercase font-mono tracking-wider">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold py-3 rounded-xl shadow-md transition text-sm">
+                        Mulai Petualangan Belajar <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Guru Login Modal -->
+        <div id="modal-guru-auth" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-sky-100 space-y-5">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-chalkboard-user text-sky-600"></i> Mode Guru & Pengelola
+                    </h3>
+                    <button onclick="closeModal('modal-guru-auth')" class="text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <div class="flex border-b border-slate-200 text-sm font-semibold">
+                    <button id="tab-login-btn" onclick="toggleAuthTab('login')" class="flex-1 py-2 border-b-2 border-sky-600 text-sky-600">Masuk Akun</button>
+                    <button id="tab-register-btn" onclick="toggleAuthTab('register')" class="flex-1 py-2 text-slate-400 border-b-2 border-transparent">Daftar Akun Baru</button>
+                </div>
+
+                <form id="form-guru-auth" onsubmit="handleGuruAuth(event)" class="space-y-4">
+                    <input type="hidden" id="auth-mode" value="login">
+                    
+                    <div id="field-nama-guru" class="hidden">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap & Gelar</label>
+                        <input type="text" id="guru-nama" placeholder="Contoh: Muh. Takbiratul Jahri, S.Pd" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Email Guru</label>
+                        <input type="email" id="guru-email" required placeholder="guru@sekolah.sch.id" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Kata Sandi</label>
+                        <input type="password" id="guru-password" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    </div>
+
+                    <button type="submit" id="auth-submit-btn" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl shadow-md transition text-sm">
+                        Masuk ke Dashboard Guru
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 2. MODE SISWA (STUDENT DASHBOARD & CONTENT)-->
+        <!-- ========================================== -->
+        <section id="screen-siswa" class="hidden space-y-6">
+            <!-- Siswa Header Info Banner -->
+            <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="text-xs font-bold text-sky-600 uppercase tracking-wide">Selamat Datang, Peserta Didik!</span>
+                    <h2 id="siswa-welcome-name" class="text-2xl font-bold text-slate-800">Siswa</h2>
+                    <p class="text-xs text-slate-500">Kelas: <span id="siswa-welcome-kelas">-</span> | Kode Sesi: <span id="siswa-welcome-kode" class="font-mono bg-sky-100 text-sky-700 px-2 py-0.5 rounded">LOKAL</span></p>
+                </div>
+
+                <!-- Progress Tracker -->
+                <div class="w-full md:w-64 bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1">
+                    <div class="flex justify-between text-xs font-semibold text-slate-600">
+                        <span>Kemajuan Belajar</span>
+                        <span id="siswa-progress-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5">
+                        <div id="siswa-progress-bar" class="bg-amber-400 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Content Tabs -->
+            <div class="flex border-b border-slate-200 overflow-x-auto custom-scrollbar gap-2 pb-1">
+                <button onclick="switchSiswaTab('materi')" id="tab-btn-materi" class="px-4 py-2 font-bold text-sm text-sky-600 border-b-2 border-sky-600 shrink-0">
+                    <i class="fa-solid fa-book-open mr-1"></i> Materi Pembelajaran
+                </button>
+                <button onclick="switchSiswaTab('aural')" id="tab-btn-aural" class="px-4 py-2 font-bold text-sm text-slate-500 shrink-0 hover:text-sky-600">
+                    <i class="fa-solid fa-headphones mr-1"></i> Teks Aural (Menyimak)
+                </button>
+                <button onclick="switchSiswaTab('game')" id="tab-btn-game" class="px-4 py-2 font-bold text-sm text-slate-500 shrink-0 hover:text-sky-600">
+                    <i class="fa-solid fa-gamepad mr-1"></i> Mini Game Edukatif
+                </button>
+                <button onclick="switchSiswaTab('kuis')" id="tab-btn-kuis" class="px-4 py-2 font-bold text-sm text-slate-500 shrink-0 hover:text-sky-600">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> Kuis Evaluasi
+                </button>
+            </div>
+
+            <!-- TAB 1: MATERI PEMBELAJARAN INTERAKTIF -->
+            <div id="siswa-tab-materi" class="space-y-6">
+                <!-- Sub Bagian 1: Pengertian -->
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm space-y-3">
+                    <div class="flex items-center gap-2 text-sky-600 font-bold text-sm uppercase">
+                        <span class="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center text-xs">1</span>
+                        Apa Itu Teks Narasi?
+                    </div>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        <strong>Teks narasi</strong> adalah teks yang menceritakan rangkaian peristiwa atau kejadian secara runtut dari awal hingga akhir. Teks narasi bertujuan untuk menghibur atau memberikan informasi cerita kepada pembaca/pendengar. Teks narasi dapat berupa <strong>fiksi</strong> (cerita rekaan) maupun <strong>nonfiksi</strong> (kisah nyata).
+                    </p>
+                </div>
+
+                <!-- Sub Bagian 2: Teks Narasi Fiksi -->
+                <div class="bg-white p-6 rounded-2xl border border-amber-100 shadow-sm space-y-3">
+                    <div class="flex items-center gap-2 text-amber-600 font-bold text-sm uppercase">
+                        <span class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs">2</span>
+                        Teks Narasi Fiksi (Khayalan / Imajinasi)
+                    </div>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Teks fiksi disusun berdasarkan <strong>imajinasi atau rekaan pengarang</strong>. Jalan cerita, tokoh, dan tempatnya tidak nyata di dunia sehari-hari.
+                    </p>
+                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 text-xs space-y-2">
+                        <h4 class="font-bold text-amber-800">Ciri-Ciri Teks Fiksi:</h4>
+                        <ul class="list-disc list-inside text-amber-900 space-y-1">
+                            <li>Tokoh dan peristiwa berasal dari hasil khayalan pengarang.</li>
+                            <li>Alur cerita dibuat menarik untuk menghibur pembaca.</li>
+                            <li>Latar tempat bisa berupa tempat ajaib atau tempat nyata yang direka.</li>
+                        </ul>
+                    </div>
+                    <div class="text-xs text-slate-500 font-semibold italic">
+                        Contoh Fiksi: Cerita dongeng Kancil dan Buaya, legenda Danau Toba, kisah Harry Potter.
+                    </div>
+                </div>
+
+                <!-- Sub Bagian 3: Teks Narasi Nonfiksi -->
+                <div class="bg-white p-6 rounded-2xl border border-emerald-100 shadow-sm space-y-3">
+                    <div class="flex items-center gap-2 text-emerald-600 font-bold text-sm uppercase">
+                        <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-xs">3</span>
+                        Teks Narasi Nonfiksi (Peristiwa Nyata / Fakta)
+                    </div>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Teks nonfiksi dibuat berdasarkan <strong>fakta, kebenaran, atau kejadian nyata</strong> yang benar-benar pernah dialami seseorang.
+                    </p>
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-xs space-y-2">
+                        <h4 class="font-bold text-emerald-800">Ciri-Ciri Teks Nonfiksi:</h4>
+                        <ul class="list-disc list-inside text-emerald-900 space-y-1">
+                            <li>Berdasarkan peristiwa nyata dan data fakta yang sah.</li>
+                            <li>Informasi dapat diperiksa kebenarannya secara ilmiah/sejarah.</li>
+                            <li>Pengarang tidak mengarang fakta utama.</li>
+                        </ul>
+                    </div>
+                    <div class="text-xs text-slate-500 font-semibold italic">
+                        Contoh Nonfiksi: Biografi Ir. Soekarno, catatan sejarah kemerdekaan, laporan perjalanan wisata sekolah.
+                    </div>
+                </div>
+
+                <!-- Sub Bagian 4: Tabel Perbandingan -->
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 text-base">Tabel Perbandingan Fiksi vs Nonfiksi</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left border-collapse">
+                            <thead>
+                                <tr class="bg-sky-50 text-sky-800 font-bold">
+                                    <th class="p-3 border border-sky-100">Pembeda</th>
+                                    <th class="p-3 border border-sky-100 bg-amber-50 text-amber-800">Teks Fiksi</th>
+                                    <th class="p-3 border border-sky-100 bg-emerald-50 text-emerald-800">Teks Nonfiksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-700">
+                                <tr>
+                                    <td class="p-3 font-semibold bg-slate-50 border">Sumber Cerita</td>
+                                    <td class="p-3 border">Imajinasi / Khayalan pengarang</td>
+                                    <td class="p-3 border">Fakta / Kejadian nyata yang terjadi</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold bg-slate-50 border">Sifat Cerita</td>
+                                    <td class="p-3 border">Rekaan (tidak nyata)</td>
+                                    <td class="p-3 border">Objektif (dapat dibuktikan)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold bg-slate-50 border">Tujuan Utama</td>
+                                    <td class="p-3 border">Menghibur & menyampaikan pesan moral</td>
+                                    <td class="p-3 border">Memberikan informasi nyata / wawasan</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="completeSection('materi')" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">
+                        Selesai Membaca & Lanjut Menyimak <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 2: TEKS AURAL (MENYIMAK) -->
+            <div id="siswa-tab-aural" class="hidden space-y-6">
+                <!-- Teks Aural 1: Fiksi -->
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">Cerita Aural 1 • Fiksi</span>
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-clock mr-1"></i> ~1 Menit</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">Kancil dan Lentera Ajaib</h3>
+                    
+                    <!-- Audio Controls Panel -->
+                    <div class="bg-sky-50 p-4 rounded-xl border border-sky-200 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <button onclick="playAudioText(1)" class="w-10 h-10 rounded-full bg-sky-600 text-white flex items-center justify-center hover:bg-sky-500 shadow">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                            <button onclick="pauseAudioText()" class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center hover:bg-slate-300">
+                                <i class="fa-solid fa-pause"></i>
+                            </button>
+                            <button onclick="stopAudioText()" class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center hover:bg-slate-300">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
+                            <label>Kecepatan:</label>
+                            <select id="audio-speed-1" onchange="changeAudioSpeed(this.value)" class="bg-white border rounded px-2 py-1 text-xs">
+                                <option value="0.8">0.8x (Lambat)</option>
+                                <option value="1.0" selected>1.0x (Normal)</option>
+                                <option value="1.2">1.2x (Cepat)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Transcript Toggle -->
+                    <div>
+                        <button onclick="toggleTranscript('transcript-1')" class="text-xs text-sky-600 font-bold hover:underline">
+                            <i class="fa-solid fa-eye mr-1"></i> Tampilkan / Sembunyikan Teks Transkrip
+                        </button>
+                        <div id="transcript-1" class="hidden mt-2 p-4 bg-slate-50 border rounded-xl text-xs text-slate-700 leading-relaxed italic">
+                            "Pada suatu sore, seekor kancil menemukan lentera kecil di tepi sungai. Ketika lentera itu dinyalakan, muncullah kunang-kunang yang dapat berbicara. Kunang-kunang itu mengajak kancil mencari pohon yang dapat mengeluarkan cahaya pelangi. Setelah melewati hutan, mereka menemukan pohon ajaib yang menerangi seluruh lembah."
+                        </div>
+                    </div>
+
+                    <!-- Evaluasi Pemahaman Aural 1 -->
+                    <div class="border-t pt-4 space-y-3">
+                        <h4 class="font-bold text-slate-800 text-xs">Pertanyaan Menyimak Cerita 1:</h4>
+                        <div class="space-y-2 text-xs">
+                            <p class="font-medium text-slate-700">1. Mengapa cerita di atas dikategorikan sebagai Teks Fiksi?</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAuralAns(this, true)" class="p-2 border rounded-xl text-left hover:bg-slate-50">A. Karena terdapat binatang (kunang-kunang) yang bisa berbicara dan pohon ajaib.</button>
+                                <button onclick="checkAuralAns(this, false)" class="p-2 border rounded-xl text-left hover:bg-slate-50">B. Karena menceritakan peristiwa sejarah bangsa Indonesia.</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teks Aural 2: Nonfiksi -->
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">Cerita Aural 2 • Nonfiksi</span>
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-clock mr-1"></i> ~1 Menit</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">Kerja Bakti Kebersihan di Sekolah</h3>
+
+                    <!-- Audio Controls Panel -->
+                    <div class="bg-sky-50 p-4 rounded-xl border border-sky-200 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <button onclick="playAudioText(2)" class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center hover:bg-emerald-500 shadow">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                            <button onclick="pauseAudioText()" class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center hover:bg-slate-300">
+                                <i class="fa-solid fa-pause"></i>
+                            </button>
+                            <button onclick="stopAudioText()" class="w-10 h-10 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center hover:bg-slate-300">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Transcript Toggle -->
+                    <div>
+                        <button onclick="toggleTranscript('transcript-2')" class="text-xs text-sky-600 font-bold hover:underline">
+                            <i class="fa-solid fa-eye mr-1"></i> Tampilkan / Sembunyikan Teks Transkrip
+                        </button>
+                        <div id="transcript-2" class="hidden mt-2 p-4 bg-slate-50 border rounded-xl text-xs text-slate-700 leading-relaxed italic">
+                            "Pada hari Jumat, siswa kelas V SD Kebangsaan mengikuti kegiatan kerja bakti di sekolah. Mereka menyapu ruang kelas, membersihkan halaman, dan memilah sampah. Wali kelas menjelaskan pentingnya menjaga kebersihan. Setelah kegiatan selesai, lingkungan sekolah menjadi bersih dan sehat."
+                        </div>
+                    </div>
+
+                    <!-- Evaluasi Pemahaman Aural 2 -->
+                    <div class="border-t pt-4 space-y-3">
+                        <h4 class="font-bold text-slate-800 text-xs">Pertanyaan Menyimak Cerita 2:</h4>
+                        <div class="space-y-2 text-xs">
+                            <p class="font-medium text-slate-700">1. Kapan dan di mana kegiatan kerja bakti tersebut berlangsung?</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="checkAuralAns(this, true)" class="p-2 border rounded-xl text-left hover:bg-slate-50">A. Hari Jumat, di lingkungan SD Kebangsaan.</button>
+                                <button onclick="checkAuralAns(this, false)" class="p-2 border rounded-xl text-left hover:bg-slate-50">B. Hari Minggu, di dalam hutan ajaib.</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="completeSection('aural')" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">
+                        Selesai Menyimak & Main Mini Game <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 3: MINI GAME EDUKATIF -->
+            <div id="siswa-tab-game" class="hidden space-y-6">
+                <!-- Game 1: Tebak Jenis Cerita -->
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad text-amber-500"></i> Game 1: Tebak Fiksi atau Nonfiksi?
+                    </h3>
+                    <p class="text-xs text-slate-600">Bacalah cuplikan teks di bawah ini, lalu pilih kategori yang paling tepat!</p>
+
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs italic text-slate-700">
+                        "Burung Garuda terbang menembus awan pelangi sambil membawa pesan rahasia dari Raja Hutan kepada sang Putri."
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="playGame1('fiksi')" class="flex-1 bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold py-2.5 rounded-xl text-xs shadow">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> FIKSI (Khayalan)
+                        </button>
+                        <button onclick="playGame1('nonfiksi')" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2.5 rounded-xl text-xs shadow">
+                            <i class="fa-solid fa-newspaper mr-1"></i> NONFIKSI (Nyata)
+                        </button>
+                    </div>
+                    <div id="game1-feedback" class="hidden text-xs font-bold p-3 rounded-xl"></div>
+                </div>
+
+                <!-- Game 2: Pasangkan Ciri-Ciri -->
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-puzzle-piece text-emerald-500"></i> Game 2: Kelompokkan Ciri Teks
+                    </h3>
+                    <p class="text-xs text-slate-600">Klik tombol di bawah untuk memasangkan ciri teks ke kategori yang benar!</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="p-4 bg-amber-50 rounded-xl border border-amber-200 space-y-2">
+                            <h4 class="font-bold text-amber-800">Ciri Fiksi:</h4>
+                            <div id="drop-fiksi" class="min-h-[60px] p-2 bg-white rounded-lg border border-dashed border-amber-300 flex flex-wrap gap-1"></div>
+                        </div>
+
+                        <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200 space-y-2">
+                            <h4 class="font-bold text-emerald-800">Ciri Nonfiksi:</h4>
+                            <div id="drop-nonfiksi" class="min-h-[60px] p-2 bg-white rounded-lg border border-dashed border-emerald-300 flex flex-wrap gap-1"></div>
+                        </div>
+                    </div>
+
+                    <div id="game2-items" class="flex flex-wrap gap-2 text-xs">
+                        <button onclick="assignCiri(this, 'fiksi')" class="px-3 py-1.5 bg-slate-100 hover:bg-amber-100 border rounded-lg">Tokoh Berupa Hewan Bicara</button>
+                        <button onclick="assignCiri(this, 'nonfiksi')" class="px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 border rounded-lg">Berdasarkan Peristiwa Nyata</button>
+                        <button onclick="assignCiri(this, 'fiksi')" class="px-3 py-1.5 bg-slate-100 hover:bg-amber-100 border rounded-lg">Latar Tempat Negeri Ajaib</button>
+                        <button onclick="assignCiri(this, 'nonfiksi')" class="px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 border rounded-lg">Dapat Diuji Kebenarannya</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="completeSection('game')" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">
+                        Selesai Main Game & Lanjut Kuis <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 4: KUIS EVALUASI (10 SOAL) -->
+            <div id="siswa-tab-kuis" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm space-y-6">
+                    <div class="flex justify-between items-center border-b pb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">Kuis Evaluasi Teks Narasi</h3>
+                            <p class="text-xs text-slate-500">Jawab 10 pertanyaan pilihan ganda dengan teliti.</p>
+                        </div>
+                        <span class="bg-sky-100 text-sky-800 font-mono text-xs font-bold px-3 py-1 rounded-full">10 Soal</span>
+                    </div>
+
+                    <form id="form-kuis-evaluasi" onsubmit="handleSubmitKuis(event)" class="space-y-6">
+                        <!-- Questions Container dynamically loaded -->
+                        <div id="quiz-questions-container" class="space-y-6"></div>
+
+                        <div class="pt-4 border-t flex justify-end">
+                            <button type="submit" id="btn-submit-kuis" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-8 py-3 rounded-2xl shadow-lg transition">
+                                <i class="fa-solid fa-paper-plane mr-2"></i> Kirim Jawaban Kuis
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Quiz Result Summary Card -->
+                    <div id="quiz-result-card" class="hidden bg-gradient-to-r from-sky-500 to-indigo-600 text-white p-6 rounded-2xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-lg font-bold">Hasil Evaluasi Pembelajaran</h4>
+                            <span id="result-badge" class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full">Selesai</span>
+                        </div>
+                        <div class="flex items-baseline gap-3">
+                            <span class="text-5xl font-black" id="result-score">0</span>
+                            <span class="text-sm text-sky-100">/ 100 Poin</span>
+                        </div>
+                        <p id="result-predicate" class="text-sm font-medium text-sky-100"></p>
+                        <p class="text-xs text-sky-200">Nilai Anda telah otomatis tersimpan dan dikirimkan ke Dashboard Guru.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. MODE GURU (TEACHER DASHBOARD)          -->
+        <!-- ========================================== -->
+        <section id="screen-guru" class="hidden space-y-6">
+            <!-- Guru Header Banner -->
+            <div class="bg-white p-6 rounded-2xl border border-sky-100 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="text-xs font-bold text-sky-600 uppercase tracking-wide">Panel Pengelolaan & Pemantauan</span>
+                    <h2 id="guru-display-name" class="text-2xl font-bold text-slate-800">Guru Bahasa Indonesia</h2>
+                    <p class="text-xs text-slate-500" id="guru-display-email">guru@sekolah.sch.id</p>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="openModalCreateClass()" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Buat Kelas Baru
+                    </button>
+                    <button onclick="handleGuruLogout()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2.5 rounded-xl text-xs">
+                        <i class="fa-solid fa-right-from-bracket"></i> Keluar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Class Selector & Link Sharer -->
+            <div class="bg-sky-50 p-6 rounded-2xl border border-sky-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-sky-800 uppercase">Kelas Aktif Dikelola:</label>
+                    <select id="guru-class-select" onchange="switchGuruClass(this.value)" class="bg-white border border-sky-300 font-bold text-slate-800 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <option value="default">Kelas V SD - Bahasa Indonesia (Lokal)</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                    <div class="bg-white border px-3 py-2 rounded-xl text-xs font-mono text-slate-600 flex items-center gap-2">
+                        <span>Kode Kelas: <strong id="guru-code-display" class="text-sky-700">KLS5SD</strong></span>
+                    </div>
+                    <button onclick="copyClassLink()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-3 py-2 rounded-xl text-xs shadow flex items-center gap-1">
+                        <i class="fa-solid fa-copy"></i> Salin Tautan Siswa
+                    </button>
+                    <button onclick="downloadCSVReport()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-2 rounded-xl text-xs shadow flex items-center gap-1">
+                        <i class="fa-solid fa-file-excel"></i> Unduh Rekap CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Live Stats Summary Widgets -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-1">
+                    <span class="text-xs text-slate-500 font-medium">Siswa Terdaftar</span>
+                    <h3 id="stat-total-siswa" class="text-2xl font-bold text-slate-800">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-1">
+                    <span class="text-xs text-slate-500 font-medium">Sedang Belajar</span>
+                    <h3 id="stat-aktif-siswa" class="text-2xl font-bold text-sky-600">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-1">
+                    <span class="text-xs text-slate-500 font-medium">Mengerjakan Kuis</span>
+                    <h3 id="stat-kuis-siswa" class="text-2xl font-bold text-amber-500">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-1">
+                    <span class="text-xs text-slate-500 font-medium">Selesai Evaluasi</span>
+                    <h3 id="stat-selesai-siswa" class="text-2xl font-bold text-emerald-600">0</h3>
+                </div>
+            </div>
+
+            <!-- Live Monitoring Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4">
+                <div class="p-4 md:p-6 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-users-viewfinder text-sky-600"></i> Pemantauan Aktivitas Siswa Secara Real-Time
+                    </h3>
+                    <span class="text-xs text-slate-400">Sinkronisasi otomatis</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                                <th class="p-3">Siswa / Kelas</th>
+                                <th class="p-3">Progres Belajar</th>
+                                <th class="p-3">Aktivitas Terakhir</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3">Nilai Kuis</th>
+                                <th class="p-3">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacher-monitoring-tbody" class="divide-y divide-slate-100 text-slate-700">
+                            <tr>
+                                <td colspan="6" class="p-6 text-center text-slate-400 italic">Belum ada data siswa yang bergabung dalam sesi kelas ini.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal Buat Kelas Baru oleh Guru -->
+        <div id="modal-buat-kelas" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-sky-100 space-y-5">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-slate-800">Buat Sesi Kelas Online</h3>
+                    <button onclick="closeModal('modal-buat-kelas')" class="text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <form onsubmit="handleCreateClass(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kelas / Rombel</label>
+                        <input type="text" id="new-class-name" required placeholder="Contoh: Kelas V-B SD 12 Makassar" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Mata Pelajaran</label>
+                        <input type="text" value="Bahasa Indonesia - Teks Narasi" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 text-sm">
+                    </div>
+
+                    <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl shadow-md transition text-sm">
+                        Simpan & Generasi Kode Sesi
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
+            <p><strong>Petualangan Teks Narasi: Fiksi atau Nonfiksi?</strong> • Media Pembelajaran Interaktif Kelas V SD</p>
+            <p>Pengembang: <strong>Muh. Takbiratul Jahri, S.Pd</strong> • Sesuai Kurikulum Merdeka</p>
+        </div>
+    </footer>
+
+    <!-- APPLICATION JAVASCRIPT LOGIC -->
+    <script type="module">
+        // Import Firebase SDK Modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // APP GLOBAL STATE
+        window.appState = {
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'petualangan-narasi-v1',
+            currentUser: null,
+            role: null, // 'guru' or 'siswa'
+            classCode: 'LOKAL',
+            siswaData: {
+                id: null,
+                nama: '',
+                kelas: '',
+                progress: 0,
+                status: 'Belum Mulai',
+                lastActivity: 'Bergabung ke aplikasi',
+                quizScore: null
+            },
+            localMonitoring: [], // Fallback storage for offline mode
+            speechSynth: window.speechSynthesis || null,
+            activeUtterance: null
+        };
+
+        // FIREBASE SETUP
+        let db = null;
+        let auth = null;
+        let isFirebaseAvailable = false;
+
+        try {
+            if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                isFirebaseAvailable = true;
+
+                // Handle Auth State
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        window.appState.currentUser = user;
+                        updateConnectionBadge('Online (Firebase Realtime Active)', 'green');
+                    } else {
+                        // Anonymous login for student if needed
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    }
+                });
+            } else {
+                updateConnectionBadge('Mode Lokal (Simulasi Saja)', 'amber');
+            }
+        } catch (e) {
+            console.warn("Firebase Initialization fallback to local state:", e);
+            updateConnectionBadge('Mode Standalone Lokal', 'amber');
+        }
+
+        function updateConnectionBadge(text, color) {
+            const badge = document.getElementById('connection-status');
+            const label = document.getElementById('connection-text');
+            if (badge && label) {
+                label.innerText = text;
+                badge.className = `flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border ${
+                    color === 'green' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'
+                }`;
+            }
+        }
+
+        // ==========================================
+        // UI & NAVIGATION FUNCTIONS
+        // ==========================================
+        window.showScreen = function(screenId) {
+            document.getElementById('screen-landing').classList.add('hidden');
+            document.getElementById('screen-siswa').classList.add('hidden');
+            document.getElementById('screen-guru').classList.add('hidden');
+
+            const target = document.getElementById(screenId);
+            if (target) target.classList.remove('hidden');
+        };
+
+        window.showRoleSelection = function(role) {
+            if (role === 'siswa') {
+                document.getElementById('modal-siswa-join').classList.remove('hidden');
+            } else if (role === 'guru') {
+                document.getElementById('modal-guru-auth').classList.remove('hidden');
+            }
+        };
+
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        };
+
+        window.toggleAuthTab = function(mode) {
+            const loginBtn = document.getElementById('tab-login-btn');
+            const regBtn = document.getElementById('tab-register-btn');
+            const nameField = document.getElementById('field-nama-guru');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const authModeInput = document.getElementById('auth-mode');
+
+            authModeInput.value = mode;
+
+            if (mode === 'login') {
+                loginBtn.className = "flex-1 py-2 border-b-2 border-sky-600 text-sky-600 font-bold";
+                regBtn.className = "flex-1 py-2 text-slate-400 border-b-2 border-transparent font-bold";
+                nameField.classList.add('hidden');
+                submitBtn.innerText = "Masuk ke Dashboard Guru";
+            } else {
+                regBtn.className = "flex-1 py-2 border-b-2 border-sky-600 text-sky-600 font-bold";
+                loginBtn.className = "flex-1 py-2 text-slate-400 border-b-2 border-transparent font-bold";
+                nameField.classList.remove('hidden');
+                submitBtn.innerText = "Daftar Akun Baru Guru";
+            }
+        };
+
+        // ==========================================
+        // SISWA FLOW LOGIC
+        // ==========================================
+        window.handleJoinSiswa = async function(event) {
+            event.preventDefault();
+            const nama = document.getElementById('siswa-nama').value.trim();
+            const kelas = document.getElementById('siswa-kelas').value.trim();
+            const kode = document.getElementById('siswa-kode').value.trim().toUpperCase() || 'LOKAL';
+
+            const siswaId = 'siswa_' + Date.now() + '_' + Math.floor(Math.random()*1000);
+
+            window.appState.role = 'siswa';
+            window.appState.classCode = kode;
+            window.appState.siswaData = {
+                id: siswaId,
+                nama: nama,
+                kelas: kelas,
+                progress: 0,
+                status: 'Sedang Belajar',
+                lastActivity: 'Berhasil bergabung ke kelas',
+                quizScore: null
+            };
+
+            // Display in Student UI
+            document.getElementById('siswa-welcome-name').innerText = nama;
+            document.getElementById('siswa-welcome-kelas').innerText = kelas;
+            document.getElementById('siswa-welcome-kode').innerText = kode;
+
+            closeModal('modal-siswa-join');
+            window.showScreen('screen-siswa');
+            
+            // Sync to Backend
+            await syncSiswaActivityToBackend('Bergabung ke kelas');
+            renderQuizQuestions();
+        };
+
+        window.switchSiswaTab = function(tabName) {
+            const tabs = ['materi', 'aural', 'game', 'kuis'];
+            tabs.forEach(t => {
+                document.getElementById(`siswa-tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = "px-4 py-2 font-bold text-sm text-slate-500 shrink-0 hover:text-sky-600";
+            });
+
+            document.getElementById(`siswa-tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabName}`).className = "px-4 py-2 font-bold text-sm text-sky-600 border-b-2 border-sky-600 shrink-0";
+            
+            syncSiswaActivityToBackend(`Membuka tab ${tabName}`);
+        };
+
+        window.completeSection = function(section) {
+            let addProgress = 25;
+            let current = window.appState.siswaData.progress;
+            let next = Math.min(100, current + addProgress);
+            
+            window.appState.siswaData.progress = next;
+            document.getElementById('siswa-progress-percent').innerText = `${next}%`;
+            document.getElementById('siswa-progress-bar').style.width = `${next}%`;
+
+            if (section === 'materi') switchSiswaTab('aural');
+            else if (section === 'aural') switchSiswaTab('game');
+            else if (section === 'game') switchSiswaTab('kuis');
+
+            syncSiswaActivityToBackend(`Menyelesaikan bagian ${section}`);
+        };
+
+        // ==========================================
+        // AUDIO & TEXT-TO-SPEECH (TEKS AURAL)
+        // ==========================================
+        window.playAudioText = function(textNum) {
+            if (!('speechSynthesis' in window)) {
+                alert("Perangkat Anda tidak mendukung fitur pemutaran audio otomatis. Silakan baca teks transkrip.");
+                return;
+            }
+
+            window.stopAudioText();
+
+            let textContent = "";
+            if (textNum === 1) {
+                textContent = "Pada suatu sore, seekor kancil menemukan lentera kecil di tepi sungai. Ketika lentera itu dinyalakan, muncullah kunang-kunang yang dapat berbicara. Kunang-kunang itu mengajak kancil mencari pohon yang dapat mengeluarkan cahaya pelangi.";
+            } else {
+                textContent = "Pada hari Jumat, siswa kelas V SD Kebangsaan mengikuti kegiatan kerja bakti di sekolah. Mereka menyapu ruang kelas, membersihkan halaman, dan memilah sampah.";
+            }
+
+            const utterance = new SpeechSynthesisUtterance(textContent);
+            utterance.lang = 'id-ID';
+            utterance.rate = parseFloat(document.getElementById('audio-speed-1')?.value || 1.0);
+
+            window.appState.activeUtterance = utterance;
+            window.speechSynthesis.speak(utterance);
+
+            syncSiswaActivityToBackend(`Mendengarkan Audio Cerita ${textNum}`);
+        };
+
+        window.pauseAudioText = function() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.pause();
+            }
+        };
+
+        window.stopAudioText = function() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+        };
+
+        window.toggleTranscript = function(elementId) {
+            const el = document.getElementById(elementId);
+            if (el) el.classList.toggle('hidden');
+        };
+
+        window.checkAuralAns = function(btn, isCorrect) {
+            if (isCorrect) {
+                btn.className = "p-2 border rounded-xl text-left bg-emerald-100 border-emerald-400 text-emerald-800 font-bold";
+            } else {
+                btn.className = "p-2 border rounded-xl text-left bg-rose-100 border-rose-400 text-rose-800";
+            }
+        };
+
+        // ==========================================
+        // MINI GAME LOGIC
+        // ==========================================
+        window.playGame1 = function(choice) {
+            const feedback = document.getElementById('game1-feedback');
+            feedback.classList.remove('hidden');
+            if (choice === 'fiksi') {
+                feedback.className = "text-xs font-bold p-3 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300";
+                feedback.innerText = "Jawaban Benar! (Burung Garuda berbicara/membawa pesan rahasia merupakan bentuk khayalan/fiksi).";
+            } else {
+                feedback.className = "text-xs font-bold p-3 rounded-xl bg-rose-100 text-rose-800 border border-rose-300";
+                feedback.innerText = "Coba lagi! Cerita ini mengandung hal ajaib, sehingga termasuk Teks Fiksi.";
+            }
+        };
+
+        window.assignCiri = function(btn, target) {
+            const container = document.getElementById(`drop-${target}`);
+            if (container) {
+                container.appendChild(btn);
+                btn.className = "px-2 py-1 bg-white border text-xs rounded shadow-sm font-semibold";
+            }
+        };
+
+        // ==========================================
+        // KUIS EVALUASI (10 SOAL)
+        // ==========================================
+        const quizData = [
+            { id: 1, q: "Teks narasi yang berisi cerita hasil rekaan atau imajinasi pengarang disebut...", options: ["Teks Nonfiksi", "Teks Fiksi", "Teks Berita", "Teks Deskripsi"], answer: 1 },
+            { id: 2, q: "Ciri utama dari teks narasi nonfiksi adalah...", options: ["Tokohnya berupa hewan ajaib", "Menggunakan latar tempat khayalan", "Berdasarkan peristiwa nyata dan fakta", "Memiliki kekuatan sihir"], answer: 2 },
+            { id: 3, q: "Manakah di bawah ini yang merupakan contoh cerita fiksi?", options: ["Biografi Ir. Soekarno", "Laporan Hasil Observasi Hutan", "Kisah Kancil Mencuri Timun", "Buku Catatan Sejarah"], answer: 2 },
+            { id: 4, q: "Informasi yang diterima melalui kegiatan mendengarkan dinamakan teks...", options: ["Visual", "Aural", "Cetak", "Gambar"], answer: 1 },
+            { id: 5, q: "Dalam cerita 'Kancil dan Lentera Ajaib', kunang-kunang dapat berbicara. Hal ini membuktikan bahwa cerita tersebut tergolong...", options: ["Fiksi", "Nonfiksi", "Sejarah", "Fakta"], answer: 0 },
+            { id: 6, q: "Kegiatan kerja bakti di sekolah yang dilakukan berdasarkan kejadian nyata disebut teks...", options: ["Dongeng", "Fiksi", "Nonfiksi", "Mitos"], answer: 2 },
+            { id: 7, q: "Perbedaan mendasar antara fiksi dan nonfiksi terletak pada...", options: ["Panjang kalimatnya", "Kebenaran fakta dan imajinasi", "Jumlah halamannya", "Warna sampul bukunya"], answer: 1 },
+            { id: 8, q: "Latar tempat yang terdapat dalam cerita fiksi bisa berupa...", options: ["Tempat sejarah nyata saja", "Negeri awan atau tempat ajaib khayalan", "Laboratorium sains resmi", "Hanya di sekolah"], answer: 1 },
+            { id: 9, q: "Urutkan rangkaian peristiwa cerita secara runtut: (1) Kancil menemukan lentera. (2) Kunang-kunang mengajak mencari pohon pelangi. (3) Kancil berjalan di tepi sungai.", options: ["(3) - (1) - (2)", "(1) - (2) - (3)", "(2) - (3) - (1)", "(3) - (2) - (1)"], answer: 0 },
+            { id: 10, q: "Tujuan utama pengarang menulis teks narasi fiksi dongeng adalah...", options: ["Menyampaikan fakta resmi negara", "Menghibur pembaca dan memberi pesan moral", "Memberikan resep masakan", "Melaporkan cuaca harian"], answer: 1 }
+        ];
+
+        function renderQuizQuestions() {
+            const container = document.getElementById('quiz-questions-container');
+            if (!container) return;
+            container.innerHTML = "";
+
+            quizData.forEach((q, idx) => {
+                const qEl = document.createElement('div');
+                qEl.className = "p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3";
+                qEl.innerHTML = `
+                    <p class="font-bold text-xs text-slate-800">${idx + 1}. ${q.q}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        ${q.options.map((opt, oIdx) => `
+                            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 hover:bg-sky-50 cursor-pointer">
+                                <input type="radio" name="q_${q.id}" value="${oIdx}" required class="text-sky-600 focus:ring-sky-500">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(qEl);
+            });
+        }
+
+        window.handleSubmitKuis = async function(event) {
+            event.preventDefault();
+            let score = 0;
+            const formData = new FormData(event.target);
+
+            quizData.forEach(q => {
+                const selected = formData.get(`q_${q.id}`);
+                if (parseInt(selected) === q.answer) {
+                    score += 10;
+                }
+            });
+
+            // Calculate Predicate
+            let predicate = "";
+            if (score >= 90) predicate = "Sangat Baik (Sangat Menguasai Materi)";
+            else if (score >= 80) predicate = "Baik (Menguasai Materi)";
+            else if (score >= 70) predicate = "Cukup (Cukup Menguasai)";
+            else predicate = "Perlu Bimbingan Tambahan";
+
+            // Update UI Result
+            document.getElementById('quiz-result-card').classList.remove('hidden');
+            document.getElementById('result-score').innerText = score;
+            document.getElementById('result-predicate').innerText = `Kategori: ${predicate}`;
+            document.getElementById('btn-submit-kuis').disabled = true;
+            document.getElementById('btn-submit-kuis').className = "bg-slate-300 text-slate-500 font-bold px-8 py-3 rounded-2xl cursor-not-allowed";
+
+            window.appState.siswaData.quizScore = score;
+            window.appState.siswaData.status = 'Selesai';
+            window.appState.siswaData.progress = 100;
+
+            await syncSiswaActivityToBackend(`Menyelesaikan Kuis Evaluasi (Nilai: ${score})`);
+        };
+
+        // ==========================================
+        // FIREBASE BACKEND SYNC (REALTIME MONITORING)
+        // ==========================================
+        async function syncSiswaActivityToBackend(activityText) {
+            window.appState.siswaData.lastActivity = activityText;
+
+            const siswaPayload = {
+                siswaId: window.appState.siswaData.id,
+                nama: window.appState.siswaData.nama,
+                kelas: window.appState.siswaData.kelas,
+                code: window.appState.classCode,
+                progress: window.appState.siswaData.progress,
+                status: window.appState.siswaData.status,
+                lastActivity: activityText,
+                quizScore: window.appState.siswaData.quizScore,
+                updatedAt: new Date().toISOString()
+            };
+
+            // Save to Local Buffer for Teacher Demo fallback
+            let existingIdx = window.appState.localMonitoring.findIndex(s => s.siswaId === siswaPayload.siswaId);
+            if (existingIdx >= 0) {
+                window.appState.localMonitoring[existingIdx] = siswaPayload;
+            } else {
+                window.appState.localMonitoring.push(siswaPayload);
+            }
+
+            // Sync to Cloud Firestore if connected
+            if (isFirebaseAvailable && db) {
+                try {
+                    const docRef = doc(db, 'artifacts', window.appState.appId, 'public', 'data', 'siswa_sessions', siswaPayload.siswaId);
+                    await setDoc(docRef, siswaPayload, { merge: true });
+                } catch (e) {
+                    console.error("Firestore sync error:", e);
+                }
+            }
+
+            renderTeacherMonitoringTable();
+        }
+
+        // ==========================================
+        // GURU FLOW LOGIC & DASHBOARD
+        // ==========================================
+        window.handleGuruAuth = async function(event) {
+            event.preventDefault();
+            const mode = document.getElementById('auth-mode').value;
+            const email = document.getElementById('guru-email').value;
+            const pass = document.getElementById('guru-password').value;
+            const nama = document.getElementById('guru-nama').value || 'Guru Bahasa Indonesia';
+
+            if (isFirebaseAvailable && auth) {
+                try {
+                    if (mode === 'register') {
+                        await createUserWithEmailAndPassword(auth, email, pass);
+                    } else {
+                        await signInWithEmailAndPassword(auth, email, pass);
+                    }
+                } catch (err) {
+                    alert("Autentikasi Guru: " + err.message);
+                    return;
+                }
+            }
+
+            window.appState.role = 'guru';
+            document.getElementById('guru-display-email').innerText = email;
+            document.getElementById('guru-display-name').innerText = nama;
+
+            closeModal('modal-guru-auth');
+            window.showScreen('screen-guru');
+            listenToRealtimeSiswaData();
+        };
+
+        window.handleGuruLogout = function() {
+            if (auth) signOut(auth);
+            window.appState.role = null;
+            window.showScreen('screen-landing');
+        };
+
+        function listenToRealtimeSiswaData() {
+            if (isFirebaseAvailable && db) {
+                const colRef = collection(db, 'artifacts', window.appState.appId, 'public', 'data', 'siswa_sessions');
+                onSnapshot(colRef, (snapshot) => {
+                    const list = [];
+                    snapshot.forEach(doc => {
+                        list.push(doc.data());
+                    });
+                    window.appState.localMonitoring = list;
+                    renderTeacherMonitoringTable();
+                }, (error) => {
+                    console.warn("Realtime listener error:", error);
+                });
+            } else {
+                renderTeacherMonitoringTable();
+            }
+        }
+
+        function renderTeacherMonitoringTable() {
+            const tbody = document.getElementById('teacher-monitoring-tbody');
+            if (!tbody) return;
+
+            const data = window.appState.localMonitoring;
+
+            // Stats counts
+            document.getElementById('stat-total-siswa').innerText = data.length;
+            document.getElementById('stat-aktif-siswa').innerText = data.filter(s => s.status === 'Sedang Belajar').length;
+            document.getElementById('stat-kuis-siswa').innerText = data.filter(s => s.status === 'Mengerjakan Kuis').length;
+            document.getElementById('stat-selesai-siswa').innerText = data.filter(s => s.status === 'Selesai').length;
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400 italic">Belum ada data siswa yang bergabung dalam sesi kelas ini.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(s => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-3 font-semibold">
+                        <div>${s.nama}</div>
+                        <div class="text-[10px] text-slate-400">${s.kelas}</div>
+                    </td>
+                    <td class="p-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-16 bg-slate-200 h-2 rounded-full overflow-hidden">
+                                <div class="bg-sky-500 h-2" style="width: ${s.progress || 0}%"></div>
+                            </div>
+                            <span class="text-[10px] font-bold">${s.progress || 0}%</span>
+                        </div>
+                    </td>
+                    <td class="p-3 text-[11px] text-slate-600">${s.lastActivity || '-'}</td>
+                    <td class="p-3">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            s.status === 'Selesai' ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800'
+                        }">${s.status || 'Aktif'}</span>
+                    </td>
+                    <td class="p-3 font-bold text-xs ${s.quizScore >= 70 ? 'text-emerald-600' : 'text-slate-800'}">
+                        ${s.quizScore !== null && s.quizScore !== undefined ? s.quizScore + ' / 100' : '-'}
+                    </td>
+                    <td class="p-3">
+                        <button onclick="alert('Detail Siswa: ${s.nama}\\nAktivitas: ${s.lastActivity}\\nNilai: ${s.quizScore || 'Belum Kuis'}')" class="text-sky-600 hover:underline text-[11px] font-bold">
+                            Detail
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.openModalCreateClass = function() {
+            document.getElementById('modal-buat-kelas').classList.remove('hidden');
+        };
+
+        window.handleCreateClass = function(event) {
+            event.preventDefault();
+            const name = document.getElementById('new-class-name').value;
+            const code = 'KLS' + Math.floor(100 + Math.random() * 900);
+
+            document.getElementById('guru-code-display').innerText = code;
+            
+            const select = document.getElementById('guru-class-select');
+            const opt = document.createElement('option');
+            opt.value = code;
+            opt.innerText = `${name} (${code})`;
+            opt.selected = true;
+            select.appendChild(opt);
+
+            closeModal('modal-buat-kelas');
+            alert(`Kelas "${name}" berhasil dibuat dengan Kode: ${code}`);
+        };
+
+        window.copyClassLink = function() {
+            const link = window.location.href;
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = link;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            alert("Tautan kelas berhasil disalin! Bagikan kepada siswa Anda.");
+        };
+
+        window.downloadCSVReport = function() {
+            const data = window.appState.localMonitoring;
+            if (data.length === 0) {
+                alert("Belum ada data nilai siswa untuk diunduh.");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,Nama Siswa,Kelas,Kode Sesi,Progres (%),Status,Nilai Kuis,Aktivitas Terakhir\n";
+            data.forEach(s => {
+                csvContent += `"${s.nama}","${s.kelas}","${s.code}","${s.progress}","${s.status}","${s.quizScore || 0}","${s.lastActivity}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Rekap_Nilai_Teks_Narasi_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+    </script>
+</body>
+</html>
